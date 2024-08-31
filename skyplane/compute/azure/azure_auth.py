@@ -213,6 +213,6 @@ class AzureAuthentication:
     def get_blob_service_client(BlobServiceClient, self, account_url: str):
         return BlobServiceClient(account_url=account_url, credential=self.credential)
 
-    @imports.inject("azure.mgmt.quota.AzureQuotaExtensionAPI", pip_extra="azure")
-    def get_quota_client(AzureQuotaExtensionAPI, self):
-        return AzureQuotaExtensionAPI(self.credential)
+    @imports.inject("azure.mgmt.quota.QuotaMgmtClient", pip_extra="azure")
+    def get_quota_client(QuotaMgmtClient, self):
+        return QuotaMgmtClient(self.credential,  self.subscription_id)
