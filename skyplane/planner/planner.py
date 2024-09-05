@@ -23,7 +23,7 @@ from skyplane.api.transfer_job import TransferJob
 import json
 
 from skyplane.utils.fn import do_parallel
-from skyplane.config_paths import config_path, azure_standardDv5_quota_path, aws_quota_path, gcp_quota_path
+from skyplane.config_paths import config_path, azure_standardDv5_quota_path, aws_quota_path, gcp_quota_path, azure_quota_path
 from skyplane.config import SkyplaneConfig
 
 
@@ -42,8 +42,8 @@ class Planner:
             if os.path.exists(aws_quota_path):
                 with aws_quota_path.open("r") as f:
                     quota_limits["aws"] = json.load(f)
-            if os.path.exists(azure_standardDv5_quota_path):
-                with azure_standardDv5_quota_path.open("r") as f:
+            if os.path.exists(aws_quota_path):
+                with aws_quota_path.open("r") as f:
                     quota_limits["azure"] = json.load(f)
             if os.path.exists(gcp_quota_path):
                 with gcp_quota_path.open("r") as f:
