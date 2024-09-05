@@ -62,7 +62,7 @@ _DEFAULT_FLAGS = {
     "gcp_use_spot_instances": False,
     "ibmcloud_use_spot_instances": False,
     "aws_instance_class": "m5.8xlarge",
-    "azure_instance_class": "Standard_D32_v4",
+    "azure_instance_class": "Standard_D32_v5",
     "gcp_instance_class": "n2-standard-32",
     "ibmcloud_instance_class": "bx2-2x8",
     "aws_default_region": "us-east-1",
