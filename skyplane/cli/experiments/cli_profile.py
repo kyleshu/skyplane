@@ -103,7 +103,7 @@ def throughput_grid(
     enable_ibmcloud: bool = typer.Option(True),
     # instances to provision
     aws_instance_class: str = typer.Option("m5.8xlarge", help="AWS instance class to use"),
-    azure_instance_class: str = typer.Option("Standard_D32_v5", help="Azure instance class to use"),
+    azure_instance_class: str = typer.Option("Standard_D32ls_v5", help="Azure instance class to use"),
     gcp_instance_class: str = typer.Option("n2-standard-32", help="GCP instance class to use"),
     ibmcloud_instance_class: str = typer.Option("bx2-2x8", help="IBM Cloud instance class to use"),
     # iperf3 options
