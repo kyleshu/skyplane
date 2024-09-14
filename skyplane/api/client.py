@@ -82,7 +82,7 @@ class SkyplaneClient:
             debug=debug,
         )
 
-    def copy(self, src: str, dst: str, recursive: bool = False):
+    def copy(self, src: str, dst: str, recursive: bool = False, num_vms: Optional[int] = 1):
         """
         A simple version of Skyplane copy. It automatically waits for transfer to complete
         (the main thread is blocked) and deprovisions VMs at the end.
@@ -97,7 +97,7 @@ class SkyplaneClient:
         :type num_vms: int
         """
 
-        pipeline = self.pipeline()
+        pipeline = self.pipeline(max_instances=num_vms)
         pipeline.queue_copy(src, dst, recursive=recursive)
         pipeline.start(progress=True)
 
