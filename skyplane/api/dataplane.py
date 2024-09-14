@@ -175,11 +175,13 @@ class Dataplane:
             self.provisioner.init_global(aws=is_aws_used, azure=is_azure_used, gcp=is_gcp_used, ibmcloud=is_ibmcloud_used)
 
             # provision VMs
-            uuids = self.provisioner.provision(
+            tasks = self.provisioner.provision(
                 authorize_firewall=allow_firewall,
                 max_jobs=max_jobs,
                 spinner=spinner,
             )
+
+            uuids = [task.uuid for task in tasks]
 
             # bind VMs to nodes
             servers = [self.provisioner.get_node(u) for u in uuids]
@@ -226,6 +228,8 @@ class Dataplane:
         except Exception as e:
             self.copy_gateway_logs()
             raise GatewayContainerStartException(f"Error starting gateways. Please check gateway logs {self.transfer_dir}")
+
+        return [task.start_time for task in tasks]
 
     def copy_gateway_logs(self):
         # copy logs from all gateways in parallel

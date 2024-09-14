@@ -102,9 +102,10 @@ class Pipeline:
 
         ## create dataplane from plan
         # dp = Dataplane(self.clientid, topo, self.provisioner, self.transfer_config, self.transfer_dir, debug=debug)
+        start_time = time.time()
         dp = self.create_dataplane(debug)
         try:
-            dp.provision(spinner=True)
+            vm_start_times = dp.provision(spinner=True)
             if progress:
                 from skyplane.cli.impl.progress_bar import ProgressBarTransferHook
 
@@ -115,13 +116,15 @@ class Pipeline:
             # wait for job to finish
             tracker.join()
 
+            end_time = time.time()
+
             # copy gateway logs
             if debug:
                 dp.copy_gateway_logs()
         except Exception as e:
             dp.copy_gateway_logs()
         dp.deprovision(spinner=True)
-        return dp
+        return dp, end_time - start_time, [end_time - vm_start_time for vm_start_time in vm_start_times]
 
     def queue_copy(
         self,

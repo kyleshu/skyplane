@@ -1,4 +1,5 @@
 import uuid
+import time
 from dataclasses import dataclass, field
 from functools import partial
 
@@ -37,6 +38,7 @@ class ProvisionerTask:
     autoterminate_minutes: Optional[int] = None
     tags: Dict[str, str] = field(default_factory=dict)
     uuid: str = field(default_factory=lambda: str(uuid.uuid4()))
+    start_time: float = 0.0
 
     def __hash__(self):
         return uuid.UUID(self.uuid).int
@@ -180,12 +182,13 @@ class Provisioner:
         self.temp_nodes.add(server)
         self.provisioned_vms[task.uuid] = server
         server.wait_for_ssh_ready()
+        task.start_time = time.time()
         if task.autoterminate_minutes:
             server.enable_auto_shutdown(task.autoterminate_minutes)
         self.temp_nodes.remove(server)
         return server
 
-    def provision(self, authorize_firewall: bool = True, max_jobs: int = 16, spinner: bool = False) -> List[str]:
+    def provision(self, authorize_firewall: bool = True, max_jobs: int = 16, spinner: bool = False) -> List[ProvisionerTask]:
         """Provision the VMs in the pending_provisioner_tasks list. Returns UUIDs of provisioned VMs.
 
         :param authorize_firewall: whether to add authorization firewall to the remote gateways (default: True)
@@ -268,7 +271,7 @@ class Provisioner:
         for task in provision_tasks:
             self.pending_provisioner_tasks.remove(task)
 
-        return [task.uuid for task in provision_tasks]
+        return provision_tasks
 
     def deprovision(self, deauthorize_firewall: bool = True, max_jobs: int = 64, spinner: bool = False):
         """Deprovision all nodes. Returns UUIDs of deprovisioned VMs.

@@ -100,7 +100,8 @@ class SkyplaneClient:
 
         pipeline = self.pipeline(max_instances=num_vms)
         pipeline.queue_copy(src, dst, recursive=recursive)
-        pipeline.start(progress=True)
+        dp, duration, vm_durations = pipeline.start(progress=True)
+        return duration, vm_durations
 
     def object_store(self):
         return ObjectStore()
