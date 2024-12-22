@@ -56,7 +56,7 @@ _DEFAULT_FLAGS = {
     "multipart_max_chunks": 9990,  # AWS limit is 10k chunks
     "num_connections": 32,
     "max_instances": 1,
-    "autoshutdown_minutes": 15,
+    "autoshutdown_minutes": 900,
     "aws_use_spot_instances": False,
     "azure_use_spot_instances": False,
     "gcp_use_spot_instances": False,
