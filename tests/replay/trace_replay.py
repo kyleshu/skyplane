@@ -14,7 +14,7 @@ with open(sys.argv[1], newline='') as infile:
         size = row[4]
         logs.append([req_id, timestamp, req_type, etag, size])
 
-client = skyplane.SkyplaneClient()
+client = SkyplaneClient()
 total_reqs = len(logs)
 start_time = time.time()
 expire_time = int(sys.argv[4])
