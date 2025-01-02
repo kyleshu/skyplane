@@ -126,6 +126,62 @@ class Pipeline:
         dp.deprovision(spinner=True)
         return dp, end_time - start_time, [end_time - vm_start_time for vm_start_time in vm_start_times]
 
+    def start_no_deprovision(self, debug=False, progress=False):
+        ## create plan from set of jobs scheduled
+        # topo = self.planner.plan(self.jobs_to_dispatch)
+
+        ## create dataplane from plan
+        # dp = Dataplane(self.clientid, topo, self.provisioner, self.transfer_config, self.transfer_dir, debug=debug)
+        start_time = time.time()
+        dp = self.create_dataplane(debug)
+        try:
+            vm_start_times = dp.provision(spinner=True)
+            if progress:
+                from skyplane.cli.impl.progress_bar import ProgressBarTransferHook
+
+                tracker = dp.run_async(self.jobs_to_dispatch, hooks=ProgressBarTransferHook(dp.topology.dest_region_tags))
+            else:
+                tracker = dp.run_async(self.jobs_to_dispatch)
+
+            # wait for job to finish
+            tracker.join()
+
+            end_time = time.time()
+
+            # copy gateway logs
+            if debug:
+                dp.copy_gateway_logs()
+        except Exception as e:
+            dp.copy_gateway_logs()
+        return dp, end_time - start_time, [end_time - vm_start_time for vm_start_time in vm_start_times]
+
+    def start_no_provision_no_deprovision(self, dp, debug=False, progress=False):
+        ## create plan from set of jobs scheduled
+        # topo = self.planner.plan(self.jobs_to_dispatch)
+
+        ## create dataplane from plan
+        # dp = Dataplane(self.clientid, topo, self.provisioner, self.transfer_config, self.transfer_dir, debug=debug)
+        start_time = time.time()
+        try:
+            if progress:
+                from skyplane.cli.impl.progress_bar import ProgressBarTransferHook
+
+                tracker = dp.run_async(self.jobs_to_dispatch, hooks=ProgressBarTransferHook(dp.topology.dest_region_tags))
+            else:
+                tracker = dp.run_async(self.jobs_to_dispatch)
+
+            # wait for job to finish
+            tracker.join()
+
+            end_time = time.time()
+
+            # copy gateway logs
+            if debug:
+                dp.copy_gateway_logs()
+        except Exception as e:
+            dp.copy_gateway_logs()
+        return dp, end_time - start_time, [end_time - vm_start_time for vm_start_time in vm_start_times]
+
     def queue_copy(
         self,
         src: str,
