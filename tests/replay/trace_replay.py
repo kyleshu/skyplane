@@ -34,11 +34,11 @@ for log in logs:
     if dp is None:
         vm_results.append([time.time() - start_time, 'start'])
         dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                               dst=f's3://motivation.us-east-2/{log[0]}.dat')
+                                                               dst=f's3://motivation.test.us-east-2/{log[0]}.dat')
         last_execute_time = time.time()
     else:
         dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                        dst=f's3://motivation.us-east-2/{log[0]}.dat',
+                                                        dst=f's3://motivation.test.us-east-2/{log[0]}.dat',
                                                         dp=dp)
         last_execute_time = time.time()
     trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1]])
