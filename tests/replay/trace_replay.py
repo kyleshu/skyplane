@@ -21,7 +21,6 @@ start_time = time.time()
 expire_time = int(sys.argv[4])
 last_execute_time = -1
 dp = None
-pipeline = None
 
 vm_results = list()
 trasnfer_results = list()
@@ -31,17 +30,16 @@ for log in logs:
         if dp is not None and time.time() - last_execute_time > expire_time:
             client.deprovision(dp)
             dp = None
-            pipeline = None
             vm_results.append([time.time() - start_time, 'stop'])
     if dp is None:
         vm_results.append([time.time() - start_time, 'start'])
-        pipeline, dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                                         dst=f's3://motivation.us-east-2/{log[0]}.dat')
+        dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
+                                                               dst=f's3://motivation.us-east-2/{log[0]}.dat')
         last_execute_time = time.time()
     else:
-        pipeline, dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                                  dst=f's3://motivation.us-east-2/{log[0]}.dat',
-                                                                  pipeline=pipeline, dp=dp)
+        dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
+                                                        dst=f's3://motivation.us-east-2/{log[0]}.dat',
+                                                        dp=dp)
         last_execute_time = time.time()
     trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1]])
 

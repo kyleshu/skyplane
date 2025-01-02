@@ -103,16 +103,17 @@ class SkyplaneClient:
         dp, duration, vm_durations = pipeline.start(progress=True)
         return duration, vm_durations
 
-    def copy_with_dp(self, src: str, dst: str, pipeline, dp, recursive: bool = False):
+    def copy_with_dp(self, src: str, dst: str, dp, recursive: bool = False, num_vms: Optional[int] = 1):
+        pipeline = self.pipeline(max_instances=num_vms)
         pipeline.queue_copy(src, dst, recursive=recursive)
-        dp, duration, vm_durations = pipeline.start_no_provision_no_deprovision(dp, progress=True)
-        return pipeline, dp, duration, vm_durations
+        dp, duration, vm_durations = pipeline.start_no_provision_no_deprovision(dp, progress=False)
+        return dp, duration, vm_durations
 
     def copy_with_no_deprov(self, src: str, dst: str, recursive: bool = False, num_vms: Optional[int] = 1):
         pipeline = self.pipeline(max_instances=num_vms)
         pipeline.queue_copy(src, dst, recursive=recursive)
-        dp, duration, vm_durations = pipeline.start_no_deprovision(progress=True)
-        return pipeline, dp, duration, vm_durations
+        dp, duration, vm_durations = pipeline.start_no_deprovision(progress=False)
+        return dp, duration, vm_durations
 
     def deprovision(self, dp):
         dp.deprovision(spinner=True)
