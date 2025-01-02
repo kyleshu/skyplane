@@ -30,26 +30,25 @@ with open(sys.argv[2], 'a') as outfile1, open(sys.argv[3], 'a') as outfile2:
     writer1 = csv.writer(outfile1)
     writer2 = csv.writer(outfile2)
     for log in logs:
-        if dp is not None and time.time() - last_execute_time > expire_time:
-            client.deprovision(dp)
-            dp = None
-            job_id = None
-            writer1.writerow([time.time() - start_time, 'stop'])
-        while start_time + log[1] < time.time():
-            if dp is not None and time.time() - last_execute_time > expire_time:
+        while True:
+            cur_time = time.time()
+            if dp is not None and cur_time - last_execute_time > expire_time:
                 client.deprovision(dp)
                 dp = None
                 job_id = None
-                writer1.writerow([time.time() - start_time, 'stop'])
+                writer1.writerow([cur_time, 'stop'])
+            if cur_time - start_time >= log[1]:
+                break
         if dp is None:
             writer1.writerow([time.time() - start_time, 'start'])
             job_id, dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
                                                                            dst=f's3://motivation.test.us-east-2/{log[0]}.dat')
-            last_execute_time = time.time()
         else:
             job_id, dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
                                                                     dst=f's3://motivation.test.us-east-2/{log[0]}.dat',
                                                                     job_id=job_id,
                                                                     dp=dp)
-            last_execute_time = time.time()
-        writer2.writerow([time.time() - start_time, time.time() - start_time - log[1], duration])
+        cur_time = time.time()
+        last_execute_time = cur_time
+        writer2.writerow([cur_time - start_time, cur_time - start_time - log[1], duration])
+        print([cur_time - start_time, cur_time - start_time - log[1], duration])
