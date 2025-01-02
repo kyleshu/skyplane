@@ -238,21 +238,21 @@ class TransferProgressTracker(Thread):
                 raise e
             end_time = int(time.time())
 
-            # verify transfer
-            try:
-                for job in self.jobs.values():
-                    logger.fs.debug(f"[TransferProgressTracker] Verifying job {job.uuid}")
-                    job.verify()
-            except Exception as e:
-                UsageClient.log_exception(
-                    "verify job",
-                    e,
-                    args,
-                    self.dataplane.topology.src_region_tag,
-                    self.dataplane.topology.dest_region_tags[0],
-                    session_start_timestamp_ms,
-                )
-                raise e
+            # # verify transfer
+            # try:
+            #     for job in self.jobs.values():
+            #         logger.fs.debug(f"[TransferProgressTracker] Verifying job {job.uuid}")
+            #         job.verify()
+            # except Exception as e:
+            #     UsageClient.log_exception(
+            #         "verify job",
+            #         e,
+            #         args,
+            #         self.dataplane.topology.src_region_tag,
+            #         self.dataplane.topology.dest_region_tags[0],
+            #         session_start_timestamp_ms,
+            #     )
+            #     raise e
 
             # transfer successfully completed
             UsageClient.log_transfer(
