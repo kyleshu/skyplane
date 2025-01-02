@@ -180,7 +180,7 @@ class Pipeline:
                 dp.copy_gateway_logs()
         except Exception as e:
             dp.copy_gateway_logs()
-        return dp, end_time - start_time, [end_time - vm_start_time for vm_start_time in vm_start_times]
+        return dp, end_time - start_time, []
 
     def queue_copy(
         self,
