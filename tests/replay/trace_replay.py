@@ -44,7 +44,7 @@ for log in logs:
                                                                 job_id=job_id,
                                                                 dp=dp)
         last_execute_time = time.time()
-    trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1]])
+    trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1], duration])
 
 with open(sys.argv[2], newline='') as outfile:
     writer = csv.writer(outfile)

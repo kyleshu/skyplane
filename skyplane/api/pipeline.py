@@ -132,10 +132,10 @@ class Pipeline:
 
         ## create dataplane from plan
         # dp = Dataplane(self.clientid, topo, self.provisioner, self.transfer_config, self.transfer_dir, debug=debug)
-        start_time = time.time()
         dp = self.create_dataplane(debug)
         try:
             vm_start_times = dp.provision(spinner=True)
+            start_time = time.time()
             if progress:
                 from skyplane.cli.impl.progress_bar import ProgressBarTransferHook
 
