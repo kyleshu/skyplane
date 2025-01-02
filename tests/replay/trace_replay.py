@@ -41,7 +41,7 @@ for log in logs:
     else:
         pipeline, dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
                                                                   dst=f's3://motivation.us-east-2/{log[0]}.dat',
-                                                                  pipeline=pipelinem, dp=dp)
+                                                                  pipeline=pipeline, dp=dp)
         last_execute_time = time.time()
     trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1]])
 
