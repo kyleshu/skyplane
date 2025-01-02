@@ -36,11 +36,12 @@ with open(sys.argv[2], 'a') as outfile1, open(sys.argv[3], 'a') as outfile2:
                 client.deprovision(dp)
                 dp = None
                 job_id = None
-                writer1.writerow([cur_time, 'stop'])
+                writer1.writerow([cur_time - start_time, 'stop'])
             if cur_time - start_time >= log[1]:
                 break
         if dp is None:
-            writer1.writerow([time.time() - start_time, 'start'])
+            cur_time = time.time()
+            writer1.writerow([cur_time - start_time, 'start'])
             job_id, dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
                                                                            dst=f's3://motivation.test.us-east-2/{log[0]}.dat')
         else:
