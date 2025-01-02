@@ -23,13 +23,18 @@ last_execute_time = -1
 dp = None
 job_id = None
 
-vm_results = list()
-trasnfer_results = list()
+for log in logs:
+    print(log)
 
 with open(sys.argv[2], 'a') as outfile1, open(sys.argv[3], 'a') as outfile2:
     writer1 = csv.writer(outfile1)
     writer2 = csv.writer(outfile2)
     for log in logs:
+        if dp is not None and time.time() - last_execute_time > expire_time:
+            client.deprovision(dp)
+            dp = None
+            job_id = None
+            writer1.writerow([time.time() - start_time, 'stop'])
         while start_time + log[1] < time.time():
             if dp is not None and time.time() - last_execute_time > expire_time:
                 client.deprovision(dp)
