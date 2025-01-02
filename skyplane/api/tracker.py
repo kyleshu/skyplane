@@ -71,7 +71,7 @@ class EmptyTransferHook(TransferHook):
     def on_chunk_completed(self, chunks: List[Chunk], region_tag: Optional[str] = None):
         return
 
-    def on_transfer_end(self, transfer_stats):
+    def on_transfer_end(self):
         return
 
     def on_transfer_error(self, error):
