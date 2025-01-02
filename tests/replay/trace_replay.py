@@ -1,3 +1,6 @@
+import sys
+import csv
+
 from skyplane.api.client import SkyplaneClient
 
 logs = list()
