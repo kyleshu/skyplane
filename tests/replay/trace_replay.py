@@ -26,7 +26,7 @@ job_id = None
 vm_results = list()
 trasnfer_results = list()
 
-with open(sys.argv[2], newline='') as outfile1, open(sys.argv[3], newline='') as outfile2:
+with open(sys.argv[2], newline='a') as outfile1, open(sys.argv[3], newline='a') as outfile2:
     writer1 = csv.writer(outfile1)
     writer2 = csv.writer(outfile2)
     for log in logs:
