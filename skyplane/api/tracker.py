@@ -299,6 +299,7 @@ class TransferProgressTracker(Thread):
             )
             sink_status_df = log_df[log_df.apply(is_complete_rec, axis=1)]
             completed_chunk_ids = list(set(sink_status_df.chunk_id.unique()))
+            completed_chunk_ids = [c for c in completed_chunk_ids if c in self._chunk_to_job_map]
 
             # update job_complete_chunk_ids and job_pending_chunk_ids
             # TODO: do chunk-tracking per-destination
