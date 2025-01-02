@@ -206,6 +206,31 @@ class Pipeline:
         self.jobs_to_dispatch.append(job)
         return job.uuid
 
+    def queue_copy_with_id(
+        self,
+        src: str,
+        dst: str or List[str],
+        job_id: str,
+        recursive: bool = False,
+    ) -> str:
+        """
+        Add a copy job to job list.
+        Return the uuid of the job.
+
+        :param src: source prefix to copy from
+        :type src: str
+        :param dst: the destination of the transfer
+        :type dst: str
+        :param recursive: if true, will copy objects at folder prefix recursively (default: False)
+        :type recursive: bool
+        """
+        if isinstance(dst, str):
+            dst = [dst]
+        job = CopyJob(src, dst, recursive, requester_pays=self.transfer_config.requester_pays, job_id=job_id)
+        logger.fs.debug(f"[SkyplaneClient] Queued copy job {job}")
+        self.jobs_to_dispatch.append(job)
+        return job.uuid
+
     def queue_sync(
         self,
         src: str,
