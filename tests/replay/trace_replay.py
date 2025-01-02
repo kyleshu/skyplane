@@ -12,8 +12,6 @@ with open(sys.argv[1], newline='') as infile:
         req_type = row[2]
         etag = row[3]
         size = row[4]
-        versions = row[5].split('/')
-        cur_version = int(row[6])
         logs.append([req_id, timestamp, req_type, etag, size])
 
 client = skyplane.SkyplaneClient()
