@@ -26,31 +26,25 @@ job_id = None
 vm_results = list()
 trasnfer_results = list()
 
-for log in logs:
-    while start_time + log[1] < time.time():
-        if dp is not None and time.time() - last_execute_time > expire_time:
-            client.deprovision(dp)
-            dp = None
-            job_id = None
-            vm_results.append([time.time() - start_time, 'stop'])
-    if dp is None:
-        vm_results.append([time.time() - start_time, 'start'])
-        job_id, dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                                       dst=f's3://motivation.test.us-east-2/{log[0]}.dat')
-        last_execute_time = time.time()
-    else:
-        job_id, dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
-                                                                dst=f's3://motivation.test.us-east-2/{log[0]}.dat',
-                                                                job_id=job_id,
-                                                                dp=dp)
-        last_execute_time = time.time()
-    trasnfer_results.append([time.time() - start_time, time.time() - start_time - log[1], duration])
-
-with open(sys.argv[2], newline='') as outfile:
-    writer = csv.writer(outfile)
-    for result in vm_results:
-        writer.writerow(result)
-with open(sys.argv[3], newline='') as outfile:
-    writer = csv.writer(outfile)
-    for result in trasnfer_results:
-        writer.writerow(result)
+with open(sys.argv[2], newline='') as outfile1, open(sys.argv[3], newline='') as outfile2:
+    writer1 = csv.writer(outfile1)
+    writer2 = csv.writer(outfile2)
+    for log in logs:
+        while start_time + log[1] < time.time():
+            if dp is not None and time.time() - last_execute_time > expire_time:
+                client.deprovision(dp)
+                dp = None
+                job_id = None
+                writer1.writerow([time.time() - start_time, 'stop'])
+        if dp is None:
+            writer1.writerow([time.time() - start_time, 'start'])
+            job_id, dp, duration, vm_duration = client.copy_with_no_deprov(src=f's3://motivation.us-east-1/{log[0]}.dat',
+                                                                           dst=f's3://motivation.test.us-east-2/{log[0]}.dat')
+            last_execute_time = time.time()
+        else:
+            job_id, dp, duration, vm_duration = client.copy_with_dp(src=f's3://motivation.us-east-1/{log[0]}.dat',
+                                                                    dst=f's3://motivation.test.us-east-2/{log[0]}.dat',
+                                                                    job_id=job_id,
+                                                                    dp=dp)
+            last_execute_time = time.time()
+        writer2.writerow([time.time() - start_time, time.time() - start_time - log[1], duration])
