@@ -354,7 +354,8 @@ class AzureCloudProvider(CloudProvider):
                     vm_params = {
                         "location": location,
                         "tags": tags,
-                        "hardware_profile": {"vm_size": self.lookup_valid_instance(location, vm_size)},
+                        "hardware_profile": {"vm_size": vm_size},
+                        # "hardware_profile": {"vm_size": self.lookup_valid_instance(location, vm_size)},
                         "storage_profile": {
                             # "image_reference": {
                             #     "publisher": "canonical",
