@@ -108,7 +108,7 @@ class AzureAuthentication:
         with open(azure_standardDv5_quota_path, "w") as f:
             all_region_vcpus_azure = {}
             for region in region_list:
-                azure_target = [item for item in result[region] if item["properties"]["name"]["value"] == "standardDv5Family"]
+                azure_target = [item for item in result[region] if item["properties"]["name"]["value"] == "standardDv4Family"]
                 if azure_target:
                     all_region_vcpus_azure[region] = azure_target[0]["properties"]["limit"]["value"]
             f.write(json.dumps(all_region_vcpus_azure, indent=2))
