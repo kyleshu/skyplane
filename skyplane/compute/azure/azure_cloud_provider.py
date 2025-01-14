@@ -366,7 +366,7 @@ class AzureCloudProvider(CloudProvider):
                             "image_reference": {
                                 "publisher": "microsoft-aks",
                                 "offer": "aks",
-                                "sku": "aks-engine-ubuntu-1804-202112",
+                                "sku": "aks-engine-ubuntu-2004-202301",
                                 "version": "latest",
                             },
                             "os_disk": {"create_option": "FromImage", "delete_option": "Delete"},
